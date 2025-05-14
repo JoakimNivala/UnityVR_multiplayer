@@ -5,7 +5,7 @@ using Unity.Collections;
 using System;
 using Unity.Services.Vivox;
 using Unity.XR.CoreUtils.Bindings.Variables;
-using UnityEngine.Animations;
+
 
 
 namespace XRMultiplayer
@@ -16,7 +16,7 @@ namespace XRMultiplayer
     /// </summary>
     public class XRINetworkPlayer : NetworkBehaviour
     {
- 
+        [SerializeField] RigConnector rigConnector;
         /// <summary>
         /// Speed at which voice amplitude changes.
         /// </summary>
@@ -167,11 +167,7 @@ namespace XRMultiplayer
         /// Previous position of the head.
         /// </summary>
         protected Vector3 m_PrevHeadPos;
-        //[SerializeField] ParentConstraint headConstraint;
-        //[SerializeField] ParentConstraint leftHandConstraint;
-        //[SerializeField] ParentConstraint rightHandConstraint;
-
-
+     
         protected void Awake()
         {
             m_VoiceChat = FindFirstObjectByType<VoiceChatManager>();
@@ -220,17 +216,24 @@ namespace XRMultiplayer
         {
             if (!IsOwner) return;
 
-            // Set transforms to be replicated with ClientNetworkTransforms
+           //This might be flimsy for now but it works
+            var realL = m_XROrigin.transform.Find("Camera Offset/Left Controller");
+            var realR = m_XROrigin.transform.Find("Camera Offset/Right Controller");
 
-            leftHand.SetPositionAndRotation(m_LeftHandOrigin.position, m_LeftHandOrigin.rotation);
-            rightHand.SetPositionAndRotation(m_RightHandOrigin.position, m_RightHandOrigin.rotation);
-            //head.SetPositionAndRotation(m_HeadOrigin.position, m_HeadOrigin.rotation);
-            //body.SetPositionAndRotation(head.position - new Vector3(0,0.7f, 0), Quaternion.Euler(0, 0, m_HeadOrigin.rotation.z));
+           //We need to find the ghost objects, that will control the player model in the network
+            var netL = transform.Find("Left Controller Networked");
+            var netR = transform.Find("Right Controller Networked");
 
-            var pos = new Vector3(m_XROrigin.Camera.transform.position.x, 0, m_XROrigin.Camera.transform.position.z);
-            transform.position = pos;
-            //transform.rotation = Quaternion.Euler(0, m_XROrigin.Camera.transform.eulerAngles.y, 0);
-            Debug.Log($"Head offset: {(head.position - m_HeadOrigin.position).magnitude}");
+            netL.SetPositionAndRotation(realL.position, realL.rotation);
+            netR.SetPositionAndRotation(realR.position, realR.rotation);
+
+            // then sync root position as before
+            var rootPos = new Vector3(
+                m_XROrigin.Camera.transform.position.x,
+                0,
+                m_XROrigin.Camera.transform.position.z
+            );
+            transform.position = rootPos;
         }
 
         ///<inheritdoc/>
@@ -259,35 +262,31 @@ namespace XRMultiplayer
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            if (IsOwner)
-            {
-                // Set Local Player.
-                LocalPlayer = this;
-                XRINetworkGameManager.Instance.LocalPlayerConnected(NetworkObject.OwnerClientId);
 
-                // Get Origin and set head.
-                m_XROrigin = FindFirstObjectByType<XROrigin>();
-                if (m_XROrigin != null)
-                {
+            
+            m_XROrigin = FindFirstObjectByType<XROrigin>();
+            if (m_XROrigin != null)
+                m_HeadOrigin = m_XROrigin.Camera.transform;
+            else
+                Utils.Log("No XR Rig Available", 1);
 
-                    //AddSourceAndActivate(headConstraint, m_XROrigin.Camera.transform);
+            //Here we assign to the rig what the hands should follow
+            var leftController = transform.Find("Left Controller Networked");
+            var rightController = transform.Find("Right Controller Networked");
 
-                    // Hook up the controllers to the hand bones
-                    // (Assuming you have references to your XR controllers transforms)
-                    //AddSourceAndActivate(leftHandConstraint, m_LeftHandOrigin);
-             
-                    m_HeadOrigin = m_XROrigin.Camera.transform;
-                }
-                else
-                {
-                    Utils.Log("No XR Rig Available", 1);
-                }
+            //This is VERY important to execute outside of !IsOwner otherwise what will happen is that 
+            //YOUR rig will be built on YOUR local world. If you want other people to see your rig
+            //you need to build upon joining everyone's rig, which the !IsOwner will block :)
+            // -1 week
+            rigConnector.Setup(leftController, rightController, m_HeadOrigin);
 
-                SetupLocalPlayer();
-            }
+            if (!IsOwner) return;
+            LocalPlayer = this;
+            XRINetworkGameManager.Instance.LocalPlayerConnected(NetworkObject.OwnerClientId);
+            SetupLocalPlayer();
             CompleteSetup();
         }
-      
+
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
