@@ -167,6 +167,8 @@ namespace XRMultiplayer
         /// Previous position of the head.
         /// </summary>
         protected Vector3 m_PrevHeadPos;
+
+        private Vector3 realH;
      
         protected void Awake()
         {
@@ -226,18 +228,19 @@ namespace XRMultiplayer
 
             netL.SetPositionAndRotation(realL.position, realL.rotation);
             netR.SetPositionAndRotation(realR.position, realR.rotation);
-            transform.rotation = m_XROrigin.transform.rotation;
+             
+            transform.SetPositionAndRotation(m_XROrigin.transform.position, m_XROrigin.transform.rotation);
             //            netR.SetPositionAndRotation(realR.position, Quaternion.Euler(realR.rotation.x, realR.rotation.y - 90f, realR.rotation.z));
 
 
             // then sync root position as before
-            var rootPos = new Vector3(
-                m_XROrigin.Camera.transform.position.x,
-                0,
-                m_XROrigin.Camera.transform.position.z
-            );
-            transform.position = rootPos;
-         
+            //var rootPos = new Vector3(
+            //    m_XROrigin.Camera.transform.position.x,
+            //    0,
+            //    m_XROrigin.Camera.transform.position.z
+            //);
+            //transform.position = rootPos;
+            
         }
 
         ///<inheritdoc/>
