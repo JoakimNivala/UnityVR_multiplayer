@@ -17,11 +17,13 @@ public class GoalScript : NetworkBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("goal");
-        if (other.CompareTag("Goal"))
+       
+        if (other.tag != "Goal")
         {
             airHockeyLogic.ScoreEvent(gameObject.name);
+            Debug.Log(gameObject.name);
             
         }
+
     }
 }

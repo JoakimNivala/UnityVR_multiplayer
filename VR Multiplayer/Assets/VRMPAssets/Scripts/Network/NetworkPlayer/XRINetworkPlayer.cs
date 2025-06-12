@@ -229,7 +229,7 @@ namespace XRMultiplayer
             netL.SetPositionAndRotation(realL.position, realL.rotation);
             netR.SetPositionAndRotation(realR.position, realR.rotation);
              
-            transform.SetPositionAndRotation(m_XROrigin.transform.position, m_XROrigin.transform.rotation);
+            transform.SetPositionAndRotation( new Vector3(m_HeadOrigin.transform.position.x, m_XROrigin.transform.position.y, m_HeadOrigin.transform.position.z)  , m_XROrigin.transform.rotation);
             //            netR.SetPositionAndRotation(realR.position, Quaternion.Euler(realR.rotation.x, realR.rotation.y - 90f, realR.rotation.z));
 
 
