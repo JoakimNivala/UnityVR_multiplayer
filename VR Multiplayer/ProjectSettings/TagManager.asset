@@ -10,6 +10,8 @@ TagManager:
   - PlayerHand
   - Destroyer
   - Goal
+  - Puck
+  - Thing
   layers:
   - Default
   - TransparentFX

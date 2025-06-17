@@ -952,6 +952,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 22551696198751355, guid: d6900a478aaeb3b48b31336b4e072407,
         type: 3}
+    - target: {fileID: 2613880095383542483, guid: 3967f87296c892e40b57e37bc8601550,
+        type: 3}
+      propertyPath: ConnectionData.ServerListenAddress
+      value: 192.168.120.188
+      objectReference: {fileID: 0}
     - target: {fileID: 4145292139985048678, guid: 3967f87296c892e40b57e37bc8601550,
         type: 3}
       propertyPath: m_RootOrder
@@ -2299,11 +2304,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Poyta
       objectReference: {fileID: 0}
-    - target: {fileID: 1514533020566134229, guid: 086d675cd0a5f2042ae5d5822e7cb67a,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2184073670975145839, guid: 086d675cd0a5f2042ae5d5822e7cb67a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2358,26 +2358,6 @@ PrefabInstance:
         type: 3}
       propertyPath: GlobalObjectIdHash
       value: 3199657353
-      objectReference: {fileID: 0}
-    - target: {fileID: 3168463088774706971, guid: 086d675cd0a5f2042ae5d5822e7cb67a,
-        type: 3}
-      propertyPath: ActiveSceneSynchronization
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3168463088774706971, guid: 086d675cd0a5f2042ae5d5822e7cb67a,
-        type: 3}
-      propertyPath: SceneMigrationSynchronization
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3168463088774706971, guid: 086d675cd0a5f2042ae5d5822e7cb67a,
-        type: 3}
-      propertyPath: InScenePlacedSourceGlobalObjectIdHash
-      value: 336085256
-      objectReference: {fileID: 0}
-    - target: {fileID: 7367288358249598153, guid: 086d675cd0a5f2042ae5d5822e7cb67a,
-        type: 3}
-      propertyPath: m_NetworkScoreVal.Array.size
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
