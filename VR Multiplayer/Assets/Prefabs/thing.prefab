@@ -213,6 +213,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6389369884019144113}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 80043d09922157c4aa5a85454fd1b152,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6149596651816713937}
     - targetCorrespondingSourceObject: {fileID: -5568371526223589888, guid: 80043d09922157c4aa5a85454fd1b152,
         type: 3}
       insertIndex: -1
@@ -490,7 +494,7 @@ MonoBehaviour:
   m_AllowOverrideOwnership: 0
   m_InteractionCheckTime: 2
   m_IgnoreSocketSelectedCallback: 1
-  m_ResetObjectOnDisconnect: 1
+  m_ResetObjectOnDisconnect: 0
   m_RelinquishOwnershipAfterTime: 1
   m_RelinquishOwnershipTime: 5
   m_UseInteractingChangedEvent: 0
@@ -524,7 +528,7 @@ MonoBehaviour:
   m_FoldoutValues: 010101
   m_AllowCollisionOwnershipExchange: 1
   m_MinExchangeVelocityMagitude: 0.025
-  spawnLocked: 1
+  spawnLocked: 0
 --- !u!114 &1022607318539146730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -635,6 +639,23 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6149596651816713937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3662067543203104966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkRigidbodyBaseExpanded: 0
+  UseRigidBodyForMotion: 1
+  AutoUpdateKinematicState: 0
+  AutoSetKinematicOnDespawn: 0
 --- !u!4 &7174488893515540294 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2484921068739079471, guid: 80043d09922157c4aa5a85454fd1b152,

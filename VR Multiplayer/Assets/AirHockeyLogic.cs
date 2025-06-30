@@ -12,24 +12,14 @@ public class AirHockeyLogic : NetworkBehaviour
     [SerializeField] private int playerID;
 
 
-    private void Awake()
-    {
-    }
+   
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         //When the host starts the local server, it creates the list for scores
-        if (IsServer)
-        {
-            m_NetworkScoreVal = new List<int>
-            {
-                0,
-                0
-            };
-        
-        }
-        
+      
+
     }
 
     public void ScoreEvent(string name)

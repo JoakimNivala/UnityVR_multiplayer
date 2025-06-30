@@ -18,7 +18,7 @@ public class GoalScript : NetworkBehaviour
     private void OnTriggerEnter(Collider other)
     {
        
-        if (other.tag != "Goal")
+        if (other.tag == "Puck")
         {
             airHockeyLogic.ScoreEvent(gameObject.name);
             Debug.Log(gameObject.name);
