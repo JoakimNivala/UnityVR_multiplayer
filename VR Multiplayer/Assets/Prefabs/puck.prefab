@@ -382,7 +382,7 @@ MonoBehaviour:
   m_FoldoutValues: 010101
   m_AllowCollisionOwnershipExchange: 1
   m_MinExchangeVelocityMagitude: 0.025
-  spawnLocked: 1
+  spawnLocked: 0
 --- !u!1 &7005762092717409922
 GameObject:
   m_ObjectHideFlags: 0
