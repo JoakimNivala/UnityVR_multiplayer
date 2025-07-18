@@ -1,0 +1,6 @@
+- Make the table spawn and puck spawn RPCS (duh)
+. otherwise guest can't spawn tables and the pucks are not synched.
+- Video player gets stuck when paused.
+.Will cause the slider to also unsynch when the video is paused.
+-Find out how to handle the log out more perfectly
+.Will cause some buh ggs if left like this
