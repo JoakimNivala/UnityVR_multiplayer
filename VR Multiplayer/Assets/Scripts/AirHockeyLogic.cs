@@ -16,25 +16,21 @@ public class AirHockeyLogic : NetworkBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void OnNetworkSpawn()
     {
-        base.OnNetworkSpawn();
-        //When the host starts the local server, it creates the list for scores
-      
-
+        base.OnNetworkSpawn();      
     }
 
     public void ScoreEvent(string name)
     {
-        //if the player scores to the player 1's goal, he'll get one point 
+        //if the player 2 scores to the player 1's goal, he'll get one point 
         if (name == "Goal")
         {
-            Debug.Log(name + ": " + m_NetworkScoreVal[0]);
-            //send information to the server about the increment to the score for player 2
+           
             RequestCurrentScoreToServerRpc(1);
         }
         else
         {
             //likewise for player 1
-            Debug.Log(name + ": " + m_NetworkScoreVal[1]);
+           
             RequestCurrentScoreToServerRpc(0);
         }
     }

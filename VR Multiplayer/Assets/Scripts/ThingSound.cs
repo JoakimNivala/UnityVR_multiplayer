@@ -17,7 +17,6 @@ public class ThingSound : MonoBehaviour
     {
         if (collision.gameObject.tag == "Puck")
         {
-            Debug.Log("??? LOLOOSADOLAOKSLAOSOALSOAS");
             AudioSource.PlayOneShot(glorp);
         }
         else

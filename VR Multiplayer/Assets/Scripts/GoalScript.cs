@@ -21,7 +21,7 @@ public class GoalScript : NetworkBehaviour
         if (other.tag == "Puck")
         {
             airHockeyLogic.ScoreEvent(gameObject.name);
-            Debug.Log(gameObject.name);
+           
             
         }
 

@@ -11,26 +11,17 @@ namespace XRMultiplayer
     /// </summary>
     public class RoomVideo : NetworkBehaviour
     {
-        //[SerializeField] bool m_AutoPlay;
         [SerializeField] VideoPlayer m_VideoPlayer;  // VideoPlayer component
         [SerializeField] VideoClip[] m_VideoClips;
         [SerializeField] AudioSource m_AudioSource;
         [SerializeField] Slider m_TimelineSlider;
-        
-      
-        //[SerializeField] Toggle m_PlayPauseToggle;
-        //[SerializeField] Toggle m_ShuffleToggle;
-        [SerializeField] Button m_NextButton;
-        [SerializeField] Button m_PreviousButton;
-        //[SerializeField] Image m_PlayPauseImage;
-        [SerializeField] Sprite m_PauseSprite;
-        [SerializeField] Sprite m_PlaySprite;
+        [SerializeField] Button m_PlayPauseToggle;
+        [SerializeField] Button m_NextButton;   
         [SerializeField] Slider  m_VolumeSlider;
-        [SerializeField] readonly NetworkVariable<float> m_VolumeSliderVal = new NetworkVariable<float>(0.50f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-        [SerializeField] readonly NetworkVariable<int> m_CurrentVideoIdNetworked = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        [SerializeField] public readonly NetworkVariable<float> m_VolumeSliderVal = new NetworkVariable<float>(0.50f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        [SerializeField] public readonly NetworkVariable<int> m_CurrentVideoIdNetworked = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
         [SerializeField] readonly NetworkVariable<bool> m_IsPlayingNetworked = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-        [SerializeField] readonly NetworkVariable<float> m_CurrentVideoTime = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-        bool m_Shuffle;
+        [SerializeField] public readonly NetworkVariable<float> m_CurrentVideoTime = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
         
 
         void Start()
@@ -43,34 +34,20 @@ namespace XRMultiplayer
                 return;
             }
 
-            //m_Dropdown.ClearOptions();
+        
 
-            //if (m_VideoClips == null || m_VideoClips.Length == 0)
-            //{
-            //    Debug.LogWarning("No video clips found. Please add some video clips.");
-            //    enabled = false;
-            //    return;
-            //}
+            // Handle video ending
 
-            //foreach (var clip in m_VideoClips)
-            //{
-            //    m_Dropdown.options.Add(new TMP_Dropdown.OptionData(clip.name));
-            //}
-
-            m_VideoPlayer.loopPointReached += OnVideoEnd; // Handle video ending
-
-            //if (m_AutoPlay)
-            //{
-            //    PickRandomVideo();
-            //}
+       
           
             SetupUIListeners();
-            //UpdateVideoTitleText();
+           
         }
 
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
+            m_VideoPlayer.loopPointReached += OnVideoEnd;
             m_VolumeSlider.value = m_VolumeSliderVal.Value;
             m_AudioSource.volume = m_VolumeSliderVal.Value;
             m_CurrentVideoIdNetworked.OnValueChanged += CurrentVideoUpdated;
@@ -81,13 +58,7 @@ namespace XRMultiplayer
             {
                 
                 m_CurrentVideoTime.Value = (float)m_VideoPlayer.time;
-                //m_IsPlayingNetworked.Value = m_AutoPlay;
-                //if (!m_AutoPlay)
-                //{
-                //    m_CurrentVideoIdNetworked.Value = 0;
-                //    SetClipTime(0.0f);
-                //    m_TimelineSlider.SetValueWithoutNotify(0.0f);
-                //}
+                
             }
             else
             {
@@ -106,6 +77,7 @@ namespace XRMultiplayer
 
         private void Update()
         {
+           
             if (!m_IsPlayingNetworked.Value || !NetworkManager.Singleton.IsConnectedClient)
                 return;
 
@@ -128,40 +100,28 @@ namespace XRMultiplayer
         {
             m_VolumeSlider.onValueChanged.AddListener(SetVolumeVal);
             m_TimelineSlider.onValueChanged.AddListener(SetClipTime);
-            //m_PlayPauseToggle.onValueChanged.AddListener(TogglePlay);
-            //m_ShuffleToggle.onValueChanged.AddListener(ToggleShuffle);
             m_NextButton.onClick.AddListener(() => PickNewVideo(1));
-            m_PreviousButton.onClick.AddListener(() => PickNewVideo(-1));
+          
         }
 
         void RemoveUIListeners()
         {
             m_TimelineSlider.onValueChanged.RemoveListener(SetClipTime);
-            //m_PlayPauseToggle.onValueChanged.RemoveListener(TogglePlay);
-            //m_ShuffleToggle.onValueChanged.RemoveListener(ToggleShuffle);
             m_NextButton.onClick.RemoveListener(() => PickNewVideo(1));
-            m_PreviousButton.onClick.RemoveListener(() => PickNewVideo(-1));
+           
         }
 
-        void ToggleShuffle(bool toggle) => m_Shuffle = toggle;
+     
 
-        void TogglePlay(bool toggle)
-        {
-            if (IsServer)
-            {
-                m_IsPlayingNetworked.Value = toggle;
-            }
-        }
+       
+       
 
         void PickNewVideo(int dir = 1)
         {
             if (!IsServer)
                 return;
 
-            if (m_Shuffle)
-            {
-                PickRandomVideo();
-            }
+      
             else
             {
                 int nextVideoId = Utils.RealMod(m_CurrentVideoIdNetworked.Value + dir, m_VideoClips.Length);
@@ -170,20 +130,7 @@ namespace XRMultiplayer
             }
         }
 
-        void PickRandomVideo()
-        {
-            int randomVideoId = m_CurrentVideoIdNetworked.Value;
-            for (int i = 0; i < 10; i++)
-            {
-                int newId = Random.Range(0, m_VideoClips.Length);
-                if (newId != randomVideoId)
-                {
-                    randomVideoId = newId;
-                    break;
-                }
-            }
-            PickVideo(randomVideoId);
-        }
+  
         void UpdateVolume(float volume)
         {
             m_AudioSource.volume = volume;
@@ -209,8 +156,7 @@ namespace XRMultiplayer
                 {
                     SetClipTime(0.0f);
                     m_VideoPlayer.Play();
-                    //m_PlayPauseImage.sprite = m_PauseSprite;
-                    //m_PlayPauseToggle.SetIsOnWithoutNotify(true);
+                    
                 }
             }
         }
@@ -225,20 +171,20 @@ namespace XRMultiplayer
 
         }
 
-        void OnIsPlayingChanged(bool oldValue, bool newValue)
+        public void OnIsPlayingChanged(bool oldValue, bool newValue)
         {
             if (newValue)
             {
                 m_VideoPlayer.Play();
-                //m_PlayPauseImage.sprite = m_PauseSprite;
+               
             }
             else
             {
                 m_VideoPlayer.Pause();
-                //m_PlayPauseImage.sprite = m_PlaySprite;
+             
             }
 
-            //m_PlayPauseToggle.SetIsOnWithoutNotify(newValue);
+           
         }
 
         void SetClipTime(float value) => m_VideoPlayer.time = Mathf.Clamp(value, 0.01f, 0.99f) * m_VideoPlayer.length;
@@ -250,12 +196,16 @@ namespace XRMultiplayer
         }
         void OnVideoEnd(VideoPlayer vp) => PickNewVideo();
 
-       
 
-       
 
-       
-        
+
+
+        public void ToggleState()
+        {
+            m_IsPlayingNetworked.Value = !m_IsPlayingNetworked.Value;
+            SetCurrentStateRpc(m_IsPlayingNetworked.Value, !m_IsPlayingNetworked.Value);
+        }
+
 
         [Rpc(SendTo.SpecifiedInParams)]
         void SendCurrentVideoTimeToClientRpc(float time, RpcParams rpcParams = default)
@@ -270,6 +220,15 @@ namespace XRMultiplayer
         }
 
        
+        [Rpc(SendTo.Server)]
+        void SetCurrentStateRpc(bool oldValue, bool newValue)
+        {
+            oldValue = newValue;
+            newValue = !newValue;
+            OnIsPlayingChanged(oldValue, newValue);
+        }
+
+        
 
     }
 }
