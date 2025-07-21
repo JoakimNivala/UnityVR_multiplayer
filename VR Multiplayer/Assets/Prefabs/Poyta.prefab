@@ -226,7 +226,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4085095865936102762}
         m_TargetAssemblyTypeName: SpawnPuck, Assembly-CSharp
-        m_MethodName: SpawnNewPuck
+        m_MethodName: SpawnPuckCall
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

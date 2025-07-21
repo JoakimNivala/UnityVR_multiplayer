@@ -9,10 +9,17 @@ public class SpawnPuck : NetworkBehaviour
 
 
 
-    public void SpawnNewPuck()
+    public void SpawnPuckCall()
     {
-
-       var obj = Instantiate(puck, puckSpawnPoint.transform.position, Quaternion.identity);
-       obj.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
+        SpawnNewPuckRPC();
     }
+
+
+    [Rpc(SendTo.Server, RequireOwnership = false)]
+    public void SpawnNewPuckRPC(RpcParams rpcParams = default)
+    {
+        var obj = Instantiate(puck, puckSpawnPoint.transform.position, Quaternion.identity);
+        obj.GetComponent<NetworkObject>().Spawn();
+    }
+   
 }

@@ -9,14 +9,18 @@ public class GoalSpawner : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        GoalLogicStarterRpc();
         
     }
-    private void Awake()
+
+    [Rpc(SendTo.Server, RequireOwnership = false)]
+    private void GoalLogicStarterRpc(RpcParams rpcParams = default)
     {
         for (int i = 0; i < arrayObjects.Length; i++)
         {
             var obj = Instantiate(arrayObjects[i], spawnPoints[i].transform.position, Quaternion.identity);
-            obj.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
+            obj.GetComponent<NetworkObject>().SpawnWithOwnership(rpcParams.Receive.SenderClientId);
         }
     }
+   
 }
