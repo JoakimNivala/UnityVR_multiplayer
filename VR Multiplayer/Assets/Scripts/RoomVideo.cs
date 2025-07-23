@@ -79,7 +79,8 @@ namespace XRMultiplayer
 
         private void Update()
         {
-           
+            m_VolumeSlider.SetValueWithoutNotify(m_VolumeSliderVal.Value);
+
             if (!m_IsPlayingNetworked.Value || !NetworkManager.Singleton.IsConnectedClient)
                 return;
 
@@ -90,6 +91,7 @@ namespace XRMultiplayer
             {
                 PickNewVideo();
             }
+          
         }
 
         public override void OnDestroy()
