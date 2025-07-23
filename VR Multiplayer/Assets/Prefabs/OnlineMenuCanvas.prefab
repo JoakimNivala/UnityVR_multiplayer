@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5724094860927031929}
   - component: {fileID: 9111382979286546229}
   - component: {fileID: 7735598508026671323}
+  - component: {fileID: 3377552607747864681}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -121,9 +122,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: XRMultiplayer.XRINetworkGameManager, VRMP
-        m_MethodName: Disconnect
+      - m_Target: {fileID: 3377552607747864681}
+        m_TargetAssemblyTypeName: ExitButtonScript, Assembly-CSharp
+        m_MethodName: ExitButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -133,6 +134,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3377552607747864681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2577685601433627383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccb1ef36eeea35e43acc43ef57ff303d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &4107449813058103416
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,7 +186,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 25.364, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1.809, y: 9.92}
+  m_AnchoredPosition: {x: 1.809021, y: 9.920013}
   m_SizeDelta: {x: 1.5, y: 1.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &835859946592381522
@@ -269,7 +283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2652959453
+  GlobalObjectIdHash: 3226698370
   InScenePlacedSourceGlobalObjectIdHash: 3226698370
   DeferredDespawnTick: 0
   Ownership: 1

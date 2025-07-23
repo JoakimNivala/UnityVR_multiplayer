@@ -1,8 +1,11 @@
-using TMPro;
+
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
-using Unity.Netcode;
+
 using UnityEngine.Video;
+
+
 
 namespace XRMultiplayer
 {
@@ -18,10 +21,11 @@ namespace XRMultiplayer
         [SerializeField] Button m_PlayPauseToggle;
         [SerializeField] Button m_NextButton;   
         [SerializeField] Slider  m_VolumeSlider;
-        [SerializeField] public readonly NetworkVariable<float> m_VolumeSliderVal = new NetworkVariable<float>(0.50f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-        [SerializeField] public readonly NetworkVariable<int> m_CurrentVideoIdNetworked = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-        [SerializeField] readonly NetworkVariable<bool> m_IsPlayingNetworked = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-        [SerializeField] public readonly NetworkVariable<float> m_CurrentVideoTime = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
+        [SerializeField] public NetworkVariable<float> m_VolumeSliderVal = new NetworkVariable<float>(0.50f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        [SerializeField] public NetworkVariable<int> m_CurrentVideoIdNetworked = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        [SerializeField] public NetworkVariable<bool> m_IsPlayingNetworked = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        [SerializeField] public  NetworkVariable<float> m_CurrentVideoTime = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
         
 
         void Start()
@@ -32,27 +36,25 @@ namespace XRMultiplayer
                 Debug.LogError("VideoPlayer component is missing!");
                 enabled = false;
                 return;
-            }
-
-        
-
-            // Handle video ending
-
-       
-          
+            }       
             SetupUIListeners();
            
         }
 
+
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            m_VideoPlayer.loopPointReached += OnVideoEnd;
-            m_VolumeSlider.value = m_VolumeSliderVal.Value;
-            m_AudioSource.volume = m_VolumeSliderVal.Value;
+            m_VolumeSlider.value = m_VolumeSlider.value;
             m_CurrentVideoIdNetworked.OnValueChanged += CurrentVideoUpdated;
             m_IsPlayingNetworked.OnValueChanged += OnIsPlayingChanged;
-            m_CurrentVideoTime.OnValueChanged += (oldValue, newValue) => m_VideoPlayer.time = newValue; m_IsPlayingNetworked.OnValueChanged += OnIsPlayingChanged;
+            m_VideoPlayer.loopPointReached += OnVideoEnd;
+            
+            m_AudioSource.volume = m_VolumeSliderVal.Value;
+           
+            m_CurrentVideoTime.OnValueChanged += (oldValue, newValue) => m_VideoPlayer.time = newValue;
+           
 
             if (IsServer)
             {
@@ -133,6 +135,7 @@ namespace XRMultiplayer
   
         void UpdateVolume(float volume)
         {
+
             m_AudioSource.volume = volume;
         }
         void PickVideo(int videoId)
@@ -188,12 +191,15 @@ namespace XRMultiplayer
         }
 
         void SetClipTime(float value) => m_VideoPlayer.time = Mathf.Clamp(value, 0.01f, 0.99f) * m_VideoPlayer.length;
-        void SetVolumeVal(float value)
-        {
-            m_VolumeSliderVal.Value = value;
-            UpdateVolume(m_VolumeSliderVal.Value);
 
+
+        public void SetVolumeVal(float value)
+        {
+            
+            SetVolumeValRpc(value);
         }
+
+    
         void OnVideoEnd(VideoPlayer vp) => PickNewVideo();
 
 
@@ -206,6 +212,14 @@ namespace XRMultiplayer
             SetCurrentStateRpc(m_IsPlayingNetworked.Value, !m_IsPlayingNetworked.Value);
         }
 
+        [Rpc(SendTo.Server)]
+        void SetVolumeValRpc(float value)
+        {
+            Debug.Log(value);
+            m_VolumeSliderVal.Value = value;
+            UpdateVolume(value);
+
+        }
 
         [Rpc(SendTo.SpecifiedInParams)]
         void SendCurrentVideoTimeToClientRpc(float time, RpcParams rpcParams = default)
@@ -214,9 +228,9 @@ namespace XRMultiplayer
         }
 
         [Rpc(SendTo.Server)]
-        void RequestCurrentVideoTimeServerRpc(RpcParams rpcParams = default)
+        void RequestCurrentVideoTimeServerRpc()
         {
-            SendCurrentVideoTimeToClientRpc((float)m_VideoPlayer.time, RpcTarget.Single(rpcParams.Receive.SenderClientId, RpcTargetUse.Temp));
+            SendCurrentVideoTimeToClientRpc((float)m_VideoPlayer.time);
         }
 
        
