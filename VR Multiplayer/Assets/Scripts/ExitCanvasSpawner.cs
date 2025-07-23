@@ -17,8 +17,8 @@ public class ExitCanvasSpawner : NetworkBehaviour
         base.OnNetworkDespawn();
        
     }
-    
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-   
+
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created :3
+
 }

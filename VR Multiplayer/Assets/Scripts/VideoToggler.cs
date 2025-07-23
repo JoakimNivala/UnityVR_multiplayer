@@ -12,16 +12,6 @@ public class VideoToggler : NetworkBehaviour
         base.OnNetworkSpawn();
     }
 
-    private void Toggler()
-    {
-        if (isPlaying)
-        {
-            videoPlayer.Pause();
-        }
-        else
-        {
-            videoPlayer.Play();
-        }
-        
-    }
+
+   
 }

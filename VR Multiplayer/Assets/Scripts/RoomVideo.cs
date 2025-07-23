@@ -14,7 +14,7 @@ namespace XRMultiplayer
     /// </summary>
     public class RoomVideo : NetworkBehaviour
     {
-        [SerializeField] VideoPlayer m_VideoPlayer;  // VideoPlayer component
+        [SerializeField] VideoPlayer m_VideoPlayer;  
         [SerializeField] VideoClip[] m_VideoClips;
         [SerializeField] AudioSource m_AudioSource;
         [SerializeField] Slider m_TimelineSlider;
@@ -26,8 +26,13 @@ namespace XRMultiplayer
         [SerializeField] public NetworkVariable<int> m_CurrentVideoIdNetworked = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
         [SerializeField] public NetworkVariable<bool> m_IsPlayingNetworked = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
         [SerializeField] public  NetworkVariable<float> m_CurrentVideoTime = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-        
 
+
+
+        //Right now a problem that seems to occur each time is that the client when pausing the game will also try to assign the value directly to the server, however NetworkVariableWritePermission.Server); limits 
+        //the rights to write to the networkvariable only for the host, this will in return cause an error, I need to look for the solution a bit more. Either the function has to be limited to only work for the host, which then would trigger
+        //an function to update the isPlaying variable to the clients so that the clients would also pause the video right after or something similar like that. Either way I Think the other major problems are now taken care of. The volume slider seems to
+        //be now affected by everyone. 
         void Start()
         {
             // Ensure VideoPlayer is assigned
@@ -178,7 +183,7 @@ namespace XRMultiplayer
 
         public void OnIsPlayingChanged(bool oldValue, bool newValue)
         {
-            if (newValue)
+            if (newValue == true)
             {
                 m_VideoPlayer.Play();
                
@@ -213,6 +218,13 @@ namespace XRMultiplayer
             m_IsPlayingNetworked.Value = !m_IsPlayingNetworked.Value;
             SetCurrentStateRpc(m_IsPlayingNetworked.Value, !m_IsPlayingNetworked.Value);
         }
+        [Rpc(SendTo.Server)]
+        void SetCurrentStateRpc(bool oldValue, bool newValue)
+        {
+            oldValue = newValue;
+            newValue = !newValue;
+            OnIsPlayingChanged(oldValue, newValue);
+        }
 
         [Rpc(SendTo.Server)]
         void SetVolumeValRpc(float value)
@@ -236,13 +248,7 @@ namespace XRMultiplayer
         }
 
        
-        [Rpc(SendTo.Server)]
-        void SetCurrentStateRpc(bool oldValue, bool newValue)
-        {
-            oldValue = newValue;
-            newValue = !newValue;
-            OnIsPlayingChanged(oldValue, newValue);
-        }
+        
 
         
 
