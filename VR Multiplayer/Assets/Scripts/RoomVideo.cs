@@ -1,5 +1,6 @@
 
 using Unity.Netcode;
+using Unity.Services.Multiplay.Authoring.Core.MultiplayApi;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,7 +26,7 @@ namespace XRMultiplayer
         [SerializeField] public NetworkVariable<float> m_VolumeSliderVal = new NetworkVariable<float>(0.50f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
         [SerializeField] public NetworkVariable<int> m_CurrentVideoIdNetworked = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
         [SerializeField] public NetworkVariable<bool> m_IsPlayingNetworked = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-        [SerializeField] public  NetworkVariable<float> m_CurrentVideoTime = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        [SerializeField] public NetworkVariable<float> m_CurrentVideoTime = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
 
 
@@ -38,18 +39,25 @@ namespace XRMultiplayer
             // Ensure VideoPlayer is assigned
             if (m_VideoPlayer == null)
             {
+                m_VideoPlayer.Pause();
                 Debug.LogError("VideoPlayer component is missing!");
+                
                 enabled = false;
                 return;
             }       
             SetupUIListeners();
            
         }
-
+        void Awake()
+        {
+            this.enabled = false;
+        }
 
 
         public override void OnNetworkSpawn()
         {
+            this.enabled = true;
+           
             base.OnNetworkSpawn();
             m_VolumeSlider.value = m_VolumeSlider.value;
             m_CurrentVideoIdNetworked.OnValueChanged += CurrentVideoUpdated;
@@ -57,9 +65,12 @@ namespace XRMultiplayer
             m_VideoPlayer.loopPointReached += OnVideoEnd;
             
             m_AudioSource.volume = m_VolumeSliderVal.Value;
-           
-            m_CurrentVideoTime.OnValueChanged += (oldValue, newValue) => m_VideoPlayer.time = newValue;
-           
+
+            m_CurrentVideoTime.OnValueChanged += (oldTime, newTime) =>
+            {
+                m_VideoPlayer.time = newTime;
+            };
+
 
             if (IsServer)
             {
@@ -71,9 +82,10 @@ namespace XRMultiplayer
             {
                 if (m_IsPlayingNetworked.Value)
                 {
+                    SetVideo(m_CurrentVideoIdNetworked.Value);
                     RequestCurrentVideoTimeServerRpc();
                    
-                    SetVideo(m_CurrentVideoIdNetworked.Value);
+                   
                     
                 }
                 OnIsPlayingChanged(false, m_IsPlayingNetworked.Value);
@@ -82,8 +94,17 @@ namespace XRMultiplayer
             CurrentVideoUpdated(0, m_CurrentVideoIdNetworked.Value);
         }
 
+        public override void OnNetworkDespawn()
+        {
+            
+            this.enabled = false;
+        }
         private void Update()
         {
+            if (IsServer && m_IsPlayingNetworked.Value)
+            {
+                m_CurrentVideoTime.Value = (float)m_VideoPlayer.time;
+            }
             m_VolumeSlider.SetValueWithoutNotify(m_VolumeSliderVal.Value);
 
             if (!m_IsPlayingNetworked.Value || !NetworkManager.Singleton.IsConnectedClient)
@@ -134,7 +155,6 @@ namespace XRMultiplayer
             else
             {
                 int nextVideoId = Utils.RealMod(m_CurrentVideoIdNetworked.Value + dir, m_VideoClips.Length);
-                Debug.Log(nextVideoId);
                 PickVideo(nextVideoId);
             }
         }
@@ -215,31 +235,26 @@ namespace XRMultiplayer
 
         public void ToggleState()
         {
-            m_IsPlayingNetworked.Value = !m_IsPlayingNetworked.Value;
-            SetCurrentStateRpc(m_IsPlayingNetworked.Value, !m_IsPlayingNetworked.Value);
+            //m_IsPlayingNetworked.Value = !m_IsPlayingNetworked.Value;
+            //SetCurrentStateRpc(m_IsPlayingNetworked.Value, !m_IsPlayingNetworked.Value);
+            if (!IsOwner) return;
+            SetCurrentStateServerRpc();
         }
         [Rpc(SendTo.Server)]
-        void SetCurrentStateRpc(bool oldValue, bool newValue)
+        void SetCurrentStateServerRpc(RpcParams rpcparams = default)
         {
-            oldValue = newValue;
-            newValue = !newValue;
-            OnIsPlayingChanged(oldValue, newValue);
+            m_IsPlayingNetworked.Value = !m_IsPlayingNetworked.Value;
         }
 
         [Rpc(SendTo.Server)]
         void SetVolumeValRpc(float value)
         {
-            Debug.Log(value);
             m_VolumeSliderVal.Value = value;
             UpdateVolume(value);
 
         }
 
-        [Rpc(SendTo.SpecifiedInParams)]
-        void SendCurrentVideoTimeToClientRpc(float time, RpcParams rpcParams = default)
-        {
-            m_VideoPlayer.time = time;
-        }
+    
 
         [Rpc(SendTo.Server)]
         void RequestCurrentVideoTimeServerRpc()
@@ -247,10 +262,14 @@ namespace XRMultiplayer
             SendCurrentVideoTimeToClientRpc((float)m_VideoPlayer.time);
         }
 
-       
-        
+        [Rpc(SendTo.SpecifiedInParams)]
+        void SendCurrentVideoTimeToClientRpc(float time, RpcParams rp = default)
+        {
+            m_CurrentVideoTime.Value = time;
+        }
 
-        
+
+
 
     }
 }

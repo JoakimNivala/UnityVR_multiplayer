@@ -12,6 +12,7 @@ TagManager:
   - Goal
   - Puck
   - Thing
+  - Table
   layers:
   - Default
   - TransparentFX
@@ -24,7 +25,7 @@ TagManager:
   - Thing
   - Neck
   - Goal
-  - 
+  - Table
   - 
   - 
   - 
