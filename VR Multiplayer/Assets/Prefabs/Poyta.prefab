@@ -3158,7 +3158,7 @@ PrefabInstance:
     - target: {fileID: -7640558969779515294, guid: cd1eea3971abe994897a0024d5a3778a,
         type: 3}
       propertyPath: m_Layer
-      value: 11
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -5477749408508380018, guid: cd1eea3971abe994897a0024d5a3778a,
         type: 3}
@@ -3268,7 +3268,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
