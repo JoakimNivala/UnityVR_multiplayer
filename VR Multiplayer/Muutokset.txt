@@ -1,0 +1,5 @@
+-Clientilta ei synkkaa objektien sijainti kädestä hostille
+.Objekti näyttää olevan maassa eikä client voi ottaa objektia käteen
+
+-Pelihahmojen kädet osoittovat pysyvästi X-positioon, joten kädet osoittavat tyhmästi sivulle
+-malletit väpätti, jos ne oli pöydällä tai ilmassa
