@@ -3,3 +3,6 @@
 
 -Pelihahmojen kädet osoittovat pysyvästi X-positioon, joten kädet osoittavat tyhmästi sivulle
 -malletit väpätti, jos ne oli pöydällä tai ilmassa
+
+
+-joko culling isommalle kameraan tai vastaavasti blenderissä pelihahmon meshin hajoittaminen yksittäisiin osiin, jotta voin piilottaa pään, kehon ja jalat pelaajalta.
