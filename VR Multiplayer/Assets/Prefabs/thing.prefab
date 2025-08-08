@@ -430,7 +430,7 @@ MonoBehaviour:
   DontDestroyWithOwner: 1
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
+  AllowOwnerToParent: 1
 --- !u!114 &283418592281963952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -552,7 +552,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: a75a3e2dde8bdb2489df3a4d8ab103c2, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: a75a3e2dde8bdb2489df3a4d8ab103c2, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
