@@ -332,6 +332,7 @@ namespace XRMultiplayer
                 {
                     player = p;
                     player.NetworkObject.GetComponent<RigBuilder>().Build();
+                    
                     return true;
                 }
             }
@@ -361,6 +362,7 @@ namespace XRMultiplayer
             {
                 m_CurrentPlayerIDs.Add(playerID);
                 playerStateChanged?.Invoke(playerID, true);
+                
             }
             else
             {

@@ -34,6 +34,9 @@ namespace XRMultiplayer
         /// </summary>
         public Transform head;
 
+        public Transform rightController;
+        public Transform leftController;
+
         public Transform body;
         //public Transform hips;
         /// <summary>
@@ -266,12 +269,11 @@ namespace XRMultiplayer
             m_PlayerColor.OnValueChanged -= UpdatePlayerColor;
         }
 
+        
         ///<inheritdoc/>
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-
-       
 
             m_XROrigin = FindFirstObjectByType<XROrigin>();
             if (m_XROrigin != null)
@@ -280,20 +282,32 @@ namespace XRMultiplayer
                 Utils.Log("No XR Rig Available", 1);
 
             //Here we assign to the rig what the hands should follow
-            var leftController = transform.Find("Left Controller Networked");
-            var rightController = transform.Find("Right Controller Networked");
+            leftController = transform.Find("Left Controller Networked");
+            rightController = transform.Find("Right Controller Networked");
 
             //This is VERY important to execute outside of !IsOwner otherwise what will happen is that 
             //YOUR rig will be built on YOUR local world. If you want other people to see your rig
             //you need to build upon joining everyone's rig, which the !IsOwner will block :)
             // -1 week
             rigConnector.Setup(leftController, rightController, m_HeadOrigin);
-
+           
             if (!IsOwner) return;
+            RigBuild();
             LocalPlayer = this;
             XRINetworkGameManager.Instance.LocalPlayerConnected(NetworkObject.OwnerClientId);
             SetupLocalPlayer();
             CompleteSetup();
+        }
+
+        public void RigBuild()
+        {
+            RigBuildRpc();
+        }
+
+        [Rpc(SendTo.Server)]
+        public void RigBuildRpc()
+        {
+            rigConnector.Setup(leftController, rightController, m_HeadOrigin);
         }
 
         public override void OnNetworkDespawn()
