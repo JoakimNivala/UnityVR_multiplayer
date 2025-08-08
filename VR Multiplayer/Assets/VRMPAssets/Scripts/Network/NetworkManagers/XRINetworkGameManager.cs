@@ -7,6 +7,7 @@ using Unity.XR.CoreUtils.Bindings.Variables;
 using UnityEngine;
 using Unity.Services.Lobbies;
 using UnityEditor;
+using UnityEngine.Animations.Rigging;
 
 namespace XRMultiplayer
 {
@@ -167,6 +168,7 @@ namespace XRMultiplayer
 
         const string k_DebugPrepend = "<color=#FAC00C>[Network Game Manager]</color> ";
 
+        public RigConnector rigConnector;
         /// <summary>
         /// See <see cref="MonoBehaviour"/>.
         /// </summary>
@@ -329,6 +331,7 @@ namespace XRMultiplayer
                 if (p.NetworkObject.OwnerClientId == id)
                 {
                     player = p;
+                    player.NetworkObject.GetComponent<RigBuilder>().Build();
                     return true;
                 }
             }

@@ -1,10 +1,11 @@
-using UnityEngine;
-using Unity.Netcode;
-using Unity.XR.CoreUtils;
-using Unity.Collections;
 using System;
+using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Netcode;
 using Unity.Services.Vivox;
+using Unity.XR.CoreUtils;
 using Unity.XR.CoreUtils.Bindings.Variables;
+using UnityEngine;
 
 
 
@@ -270,7 +271,8 @@ namespace XRMultiplayer
         {
             base.OnNetworkSpawn();
 
-            
+       
+
             m_XROrigin = FindFirstObjectByType<XROrigin>();
             if (m_XROrigin != null)
                 m_HeadOrigin = m_XROrigin.Camera.transform;
