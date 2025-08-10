@@ -16,7 +16,7 @@ public class RigConnector : MonoBehaviour
     public void Setup(Transform leftHandSrc, Transform rightHandSrc, Transform headSrc)
     {
         
-        Debug.Log("hallo?");
+        Debug.Log("Rig builder");
 
         //We can use the avatar's animator to add the bone structure to two bone IK constraint
         //Also, DO NOT add the FBX file in the project and make a new prefab out of it, if you will do this

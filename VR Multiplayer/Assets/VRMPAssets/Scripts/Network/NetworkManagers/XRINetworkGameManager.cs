@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Netcode;
-using Unity.Services.Lobbies.Models;
-using Unity.XR.CoreUtils.Bindings.Variables;
-using UnityEngine;
 using Unity.Services.Lobbies;
+using Unity.Services.Lobbies.Models;
+using Unity.Services.Matchmaker.Models;
+using Unity.XR.CoreUtils.Bindings.Variables;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.UIElements;
 
 namespace XRMultiplayer
 {
@@ -52,6 +54,7 @@ namespace XRMultiplayer
         /// </summary>
         public const int maxPlayers = 20;
 
+        public XRINetworkPlayer[] allPlayers;
         /// <summary>
         /// Singleton Reference for access to this manager.
         /// </summary>
@@ -323,19 +326,7 @@ namespace XRMultiplayer
         public virtual bool GetPlayerByID(ulong id, out XRINetworkPlayer player)
         {
             // Find all existing players in scene. This is a workaround until NGO exposes client side player list (2.x I believe - JG).
-            XRINetworkPlayer[] allPlayers = FindObjectsByType<XRINetworkPlayer>(FindObjectsSortMode.None);
-
-            //Loops through existing players and returns true if player with id is found.
-            foreach (XRINetworkPlayer p in allPlayers)
-            {
-                if (p.NetworkObject.OwnerClientId == id)
-                {
-                    player = p;
-                    player.NetworkObject.GetComponent<RigBuilder>().Build();
-                    
-                    return true;
-                }
-            }
+           
             player = null;
             return false;
         }
@@ -357,6 +348,19 @@ namespace XRMultiplayer
         /// <remarks>Called from <see cref="XRINetworkPlayer.CompleteSetup"/>.</remarks>
         public virtual void PlayerJoined(ulong playerID)
         {
+            allPlayers = FindObjectsByType<XRINetworkPlayer>(FindObjectsSortMode.None);
+
+            //Loops through existing players and returns true if player with id is found.
+            foreach (XRINetworkPlayer p in allPlayers)
+            {
+               
+                   var player = p;
+                   player.NetworkObject.GetComponent<RigBuilder>().Build();
+                Debug.Log("???????????????????????????");
+                    
+                
+            }
+
             // If playerID is not already registered, then add.
             if (!m_CurrentPlayerIDs.Contains(playerID))
             {
@@ -376,9 +380,11 @@ namespace XRMultiplayer
         /// <param name="playerID"><see cref="NetworkObject.OwnerClientId"/> of the player who left.</param>
         public virtual void PlayerLeft(ulong playerID)
         {
+            Array.Clear(allPlayers, 0, allPlayers.Length);
             // Check to make sure player has been registerd.
             if (m_CurrentPlayerIDs.Contains(playerID))
             {
+               
                 m_CurrentPlayerIDs.Remove(playerID);
                 playerStateChanged?.Invoke(playerID, false);
             }

@@ -9,7 +9,7 @@ public class NetworkObjectDestroyerMe : NetworkBehaviour
         {
             if (IsServer)
             {
-                Debug.Log("LO");
+              
                 var obj = other.transform.root.GetComponent<NetworkObject>();
                 obj.Despawn(destroy: true);
                
