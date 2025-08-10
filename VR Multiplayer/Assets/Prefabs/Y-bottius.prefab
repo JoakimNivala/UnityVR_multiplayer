@@ -1406,7 +1406,7 @@ MonoBehaviour:
   SceneMigrationSynchronization: 1
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
+  AutoObjectParentSync: 0
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
 --- !u!114 &-613869564179927912
@@ -1448,6 +1448,8 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   rigConnector: {fileID: 6189381523458570250}
   head: {fileID: 1517226533946788078}
+  rightController: {fileID: 0}
+  leftController: {fileID: 0}
   body: {fileID: 4634191953079198450}
   leftHand: {fileID: 3202602666186549404}
   rightHand: {fileID: 5800373917672980749}
