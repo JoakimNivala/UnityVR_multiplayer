@@ -22,9 +22,11 @@ public class SpawnTable : NetworkBehaviour
     //server RPC methods require the ServerRpc suffix to the end of the method or unity will throw error.
     private void SpawnTableRPC(RpcParams rpcParams = default)
     {
-
-        var obj = Instantiate(table, new Vector3(-4.607f, 8.9208f, -20.05589f), Quaternion.Euler(0, -66.435f, 0));
-        obj.GetComponent<NetworkObject>().SpawnWithOwnership(rpcParams.Receive.SenderClientId);
+        if (IsServer)
+        {
+            var obj = Instantiate(table, new Vector3(-4.607f, 8.9208f, -20.05589f), Quaternion.Euler(0, -66.435f, 0));
+            obj.GetComponent<NetworkObject>().SpawnWithOwnership(rpcParams.Receive.SenderClientId);
+        }
     }
 };
 
