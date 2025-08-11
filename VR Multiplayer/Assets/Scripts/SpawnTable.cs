@@ -23,7 +23,7 @@ public class SpawnTable : NetworkBehaviour
     private void SpawnTableRPC(RpcParams rpcParams = default)
     {
 
-        var obj = Instantiate(table, new Vector3(-4.607f, 8.932f, -20.05589f), Quaternion.Euler(0, -66.435f, 0));
+        var obj = Instantiate(table, new Vector3(-4.607f, 8.9208f, -20.05589f), Quaternion.Euler(0, -66.435f, 0));
         obj.GetComponent<NetworkObject>().SpawnWithOwnership(rpcParams.Receive.SenderClientId);
     }
 };
