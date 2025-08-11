@@ -31,6 +31,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2824373696819323152}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1611133273779856969
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1407105071834118284}
+  m_Layer: 0
+  m_Name: NetworkedHead
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1407105071834118284
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1611133273779856969}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2597091402389999002}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1655512267710201475
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,14 +630,18 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1b6e8711c8394c3458786721680bc612,
         type: 3}
       insertIndex: 0
-      addedObject: {fileID: 7962856347603650210}
+      addedObject: {fileID: 1407105071834118284}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1b6e8711c8394c3458786721680bc612,
         type: 3}
       insertIndex: 1
-      addedObject: {fileID: 7932414342220708753}
+      addedObject: {fileID: 7962856347603650210}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1b6e8711c8394c3458786721680bc612,
         type: 3}
       insertIndex: 2
+      addedObject: {fileID: 7932414342220708753}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1b6e8711c8394c3458786721680bc612,
+        type: 3}
+      insertIndex: 3
       addedObject: {fileID: 623190710743425184}
     - targetCorrespondingSourceObject: {fileID: -8884984920518210719, guid: 1b6e8711c8394c3458786721680bc612,
         type: 3}

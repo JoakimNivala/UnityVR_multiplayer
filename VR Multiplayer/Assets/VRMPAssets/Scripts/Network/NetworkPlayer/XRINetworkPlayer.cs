@@ -225,18 +225,20 @@ namespace XRMultiplayer
            //This might be flimsy for now but it works
             var realL = m_XROrigin.transform.Find("Camera Offset/Left Controller");
             var realR = m_XROrigin.transform.Find("Camera Offset/Right Controller");
+          
            
 
            //We need to find the ghost objects, that will control the player model in the network
             var netL = transform.Find("Left Controller Networked");
             var netR = transform.Find("Right Controller Networked");
+            var netH = m_HeadOrigin.transform;
            
 
             netL.SetPositionAndRotation(realL.position, realL.rotation);
             netR.SetPositionAndRotation(realR.position, realR.rotation);
              
-            transform.SetPositionAndRotation( new Vector3(m_HeadOrigin.transform.position.x, m_XROrigin.transform.position.y, m_HeadOrigin.transform.position.z)  , m_XROrigin.transform.rotation);
             //            netR.SetPositionAndRotation(realR.position, Quaternion.Euler(realR.rotation.x, realR.rotation.y - 90f, realR.rotation.z));
+            transform.SetPositionAndRotation(new Vector3(netH.transform.position.x, netH.root.transform.position.y, netH.transform.position.z), netH.root.transform.rotation);
 
 
             // then sync root position as before
@@ -246,7 +248,7 @@ namespace XRMultiplayer
             //    m_XROrigin.Camera.transform.position.z
             //);
             //transform.position = rootPos;
-            
+
         }
 
         ///<inheritdoc/>
@@ -283,7 +285,7 @@ namespace XRMultiplayer
                 if (m_XROrigin != null)
                 {
                     m_HeadOrigin = m_XROrigin.Camera.transform;
-                    networkedHead = m_HeadOrigin.transform;
+                   
                 }
                    
                 else
