@@ -36,7 +36,7 @@ namespace XRMultiplayer
 
         public Transform rightController;
         public Transform leftController;
-
+        private Transform networkedHead;
         public Transform body;
         //public Transform hips;
         /// <summary>
@@ -225,10 +225,12 @@ namespace XRMultiplayer
            //This might be flimsy for now but it works
             var realL = m_XROrigin.transform.Find("Camera Offset/Left Controller");
             var realR = m_XROrigin.transform.Find("Camera Offset/Right Controller");
+           
 
            //We need to find the ghost objects, that will control the player model in the network
             var netL = transform.Find("Left Controller Networked");
             var netR = transform.Find("Right Controller Networked");
+           
 
             netL.SetPositionAndRotation(realL.position, realL.rotation);
             netR.SetPositionAndRotation(realR.position, realR.rotation);
@@ -275,21 +277,28 @@ namespace XRMultiplayer
         {
             base.OnNetworkSpawn();
 
-            m_XROrigin = FindFirstObjectByType<XROrigin>();
-            if (m_XROrigin != null)
-                m_HeadOrigin = m_XROrigin.Camera.transform;
-            else
+            if (IsOwner)
+            {
+                m_XROrigin = FindFirstObjectByType<XROrigin>();
+                if (m_XROrigin != null)
+                {
+                    m_HeadOrigin = m_XROrigin.Camera.transform;
+                    networkedHead = m_HeadOrigin.transform;
+                }
+                   
+                else
+                    Debug.Log("========================================");
                 Utils.Log("No XR Rig Available", 1);
-
+            }
             //Here we assign to the rig what the hands should follow
             leftController = transform.Find("Left Controller Networked");
             rightController = transform.Find("Right Controller Networked");
-
+            
             //This is VERY important to execute outside of !IsOwner otherwise what will happen is that 
             //YOUR rig will be built on YOUR local world. If you want other people to see your rig
             //you need to build upon joining everyone's rig, which the !IsOwner will block :)
             // -1 week
-            rigConnector.Setup(leftController, rightController, m_HeadOrigin);
+            rigConnector.Setup(leftController, rightController, networkedHead);
            
             if (!IsOwner) return;
             RigBuild();
