@@ -18,7 +18,7 @@ public class SpawnTable : NetworkBehaviour
     }
 
 
-    [Rpc(SendTo.Server)]
+    [Rpc(SendTo.Server, RequireOwnership = false)]
     //server RPC methods require the ServerRpc suffix to the end of the method or unity will throw error.
     private void SpawnTableRPC(RpcParams rpcParams = default)
     {
