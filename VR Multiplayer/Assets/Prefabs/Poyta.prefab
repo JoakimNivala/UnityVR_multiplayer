@@ -3335,7 +3335,7 @@ MonoBehaviour:
   GlobalObjectIdHash: 336085256
   InScenePlacedSourceGlobalObjectIdHash: 336085256
   DeferredDespawnTick: 0
-  Ownership: 1
+  Ownership: 3
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 1
@@ -3369,7 +3369,7 @@ MonoBehaviour:
   RotationMaxInterpolationTime: 0.1
   ScaleLerpSmoothing: 1
   ScaleMaxInterpolationTime: 0.1
-  AuthorityMode: 1
+  AuthorityMode: 0
   TickSyncChildren: 0
   UseUnreliableDeltas: 0
   SyncPositionX: 1
