@@ -17,6 +17,7 @@ namespace XRMultiplayer
     /// </summary>
     public class XRINetworkPlayer : NetworkBehaviour
     {
+        [SerializeField] private List<GameObject> list;
         [SerializeField] RigConnector rigConnector;
         /// <summary>
         /// Speed at which voice amplitude changes.
@@ -269,7 +270,7 @@ namespace XRMultiplayer
             m_PlayerColor.OnValueChanged -= UpdatePlayerColor;
         }
 
-        
+
         ///<inheritdoc/>
         public override void OnNetworkSpawn()
         {
@@ -290,8 +291,16 @@ namespace XRMultiplayer
             //you need to build upon joining everyone's rig, which the !IsOwner will block :)
             // -1 week
             rigConnector.Setup(leftController, rightController, m_HeadOrigin);
-           
+
             if (!IsOwner) return;
+            int Player = LayerMask.NameToLayer("Player");
+            foreach (GameObject obj in list)
+            {
+                obj.layer = Player;
+            }
+            
+             
+          
             RigBuild();
             LocalPlayer = this;
             XRINetworkGameManager.Instance.LocalPlayerConnected(NetworkObject.OwnerClientId);
