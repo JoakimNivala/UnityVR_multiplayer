@@ -3725,7 +3725,7 @@ MonoBehaviour:
   m_InteractionCheckTime: 2
   m_IgnoreSocketSelectedCallback: 1
   m_ResetObjectOnDisconnect: 1
-  m_RelinquishOwnershipAfterTime: 1
+  m_RelinquishOwnershipAfterTime: 0
   m_RelinquishOwnershipTime: 1.01
   m_UseInteractingChangedEvent: 0
   OnInteractingChanged:
