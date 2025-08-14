@@ -15,7 +15,7 @@ public class SpawnPuck : NetworkBehaviour
     }
 
 
-    [Rpc(SendTo.Server, RequireOwnership = false)]
+    [Rpc(SendTo.Server)]
     public void SpawnNewPuckRPC(RpcParams rpcParams = default)
     {
         var obj = Instantiate(puck, puckSpawnPoint.transform.position, Quaternion.identity);
