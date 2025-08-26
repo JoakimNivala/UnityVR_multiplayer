@@ -1,10 +1,14 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation;
+using UnityEngine.InputSystem;
 
 namespace XRMultiplayer
 {
     public class CharacterResetter : MonoBehaviour
     {
+        public InputActionReference rightSecondaryButton;  
+        public System.Action onRightButtonPressed;
+
         [SerializeField] Vector2 m_MinMaxHeight = new Vector2(-2.5f, 25.0f);
         [SerializeField] float m_ResetDistance = 75.0f;
         [SerializeField] Vector3 offlinePosition = new Vector3(0, .5f, -12.0f);
@@ -79,6 +83,20 @@ namespace XRMultiplayer
         void SetPlayerToOfflinePosition()
         {
             ResetPlayer(offlinePosition);
+        }
+        private void OnEnable()
+        {
+            rightSecondaryButton.action.performed += OnButtonPerformed;
+            rightSecondaryButton.action.Enable();
+        }
+        private void OnDisable()
+        {
+            rightSecondaryButton.action.performed -= OnButtonPerformed;
+            rightSecondaryButton.action.Disable();
+        }
+        private void OnButtonPerformed(InputAction.CallbackContext ctx)
+        {
+            onRightButtonPressed?.Invoke();
         }
     }
 }

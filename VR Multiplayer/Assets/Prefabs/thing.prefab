@@ -217,6 +217,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6149596651816713937}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 80043d09922157c4aa5a85454fd1b152,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3326485785987121819}
     - targetCorrespondingSourceObject: {fileID: -5568371526223589888, guid: 80043d09922157c4aa5a85454fd1b152,
         type: 3}
       insertIndex: -1
@@ -656,6 +660,25 @@ MonoBehaviour:
   UseRigidBodyForMotion: 1
   AutoUpdateKinematicState: 1
   AutoSetKinematicOnDespawn: 0
+--- !u!114 &3326485785987121819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3662067543203104966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7951c64acb0fa62458bf30a60089fe2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 0
+  m_CheckFor2DOcclusion: 0
+  m_CheckFor3DOcclusion: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RaycastTriggerInteraction: 1
 --- !u!4 &7174488893515540294 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2484921068739079471, guid: 80043d09922157c4aa5a85454fd1b152,
