@@ -2,3 +2,4 @@ Pöytä ei liiku
 Kiekko ja kapula spawnaus
 korkeudensäädin
 planetaario
+a
